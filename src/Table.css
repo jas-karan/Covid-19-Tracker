@@ -2,11 +2,7 @@
     margin-top: 20px;
     overflow: auto;
     height: 400px;
-    color: #6a5d5d;
-}
-
-.table tr:nth-of-type(odd) {
-    background-color: #f3f2f8;
+    color: white;
 }
 
 .table tr {

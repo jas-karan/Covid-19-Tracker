@@ -11,7 +11,7 @@ import { prettyPrintStat } from './util';
 
 function App() {
   const [countries, setCountries] = useState([]);
-  const [country, setCountry] = useState("Worldwide");
+  const [country, setCountry] = useState("Select a Country");
   const [countryInfo, setCountryInfo] = useState({});
   // to store country info of selected country
   const [tableData, setTableData] = useState([]);
@@ -58,7 +58,7 @@ function App() {
   const onCountryChange = async (event) => {
     const countryCode = event.target.value;
 
-    const url = countryCode === 'Worldwide'
+    const url = countryCode === 'Select a Country'
       ? 'https://disease.sh/v3/covid-19/all'
       : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
 
@@ -67,21 +67,39 @@ function App() {
       .then(data => {
         setCountry(countryCode);
         setCountryInfo(data);
-        if (data.countryInfo != undefined)
+        if (data.countryInfo !== undefined) {
+          setMapZoom(4.5);
           setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        }
       })
   }
 
 
   return (
     <div className="App">
+
+      <Card className="app__right">
+        <CardContent>
+          {/*Table (each country) */}
+          <h3 style={{ color: 'white', fontWeight: '500', fontSize: '25px' }}>Live cases by Country</h3>
+          <Table countries={tableData} />
+
+          {/*Graph */}
+          <h3 className="app__graphTitle">Worldwide new {casesType}</h3>
+          <LineGraph className="app__graph" casesType={casesType} />
+        </CardContent>
+      </Card>
+
       <div className="app__left">
         {/*header*/}
         <div className="app__header">
-          <h1>COVID-19 TRACKER</h1>
+          <div style={{ display: 'flex' }}>
+            <h1 style={{ color: '#AADAFF', marginRight: '10px', fontWeight: '500', fontSize: '40px' }}>Track Coronavirus Cases</h1>
+            <img src="https://img.icons8.com/bubbles/50/000000/protection-mask.png" alt="" />
+          </div>
           <FormControl className="app__dropdown">
-            <Select variant="outlined" onChange={onCountryChange} value={country}>
-              <MenuItem value="Worldwide">Worldwide</MenuItem>
+            <Select variant="outlined" onChange={onCountryChange} style={{ color: 'white', border: '1px solid white' }} value={country}>
+              <MenuItem value="Select a Country">Select a Country</MenuItem>
               {countries.map((country) => (
                 <MenuItem value={country.value}>{country.name}</MenuItem>
               ))}
@@ -98,20 +116,20 @@ function App() {
         <div className="app__stats">
           <InfoBox
             isRed
-            active={casesType == 'cases'}
+            active={casesType === 'cases'}
             onClick={e => setCasesType('cases')}
-            title="Coronavirus Cases"
+            title="Confirmed Cases"
             cases={prettyPrintStat(countryInfo.todayCases)}
             total={prettyPrintStat(countryInfo.cases)} />
           <InfoBox
-            active={casesType == 'recovered'}
+            active={casesType === 'recovered'}
             onClick={e => setCasesType('recovered')}
-            title="Recovered"
+            title="Recovered Patients"
             cases={prettyPrintStat(countryInfo.todayRecovered)}
             total={prettyPrintStat(countryInfo.recovered)} />
           <InfoBox
             isRed
-            active={casesType == 'deaths'}
+            active={casesType === 'deaths'}
             onClick={e => setCasesType('deaths')}
             title="Deaths"
             cases={prettyPrintStat(countryInfo.todayDeaths)}
@@ -122,17 +140,6 @@ function App() {
         <Map countries={mapCountries} casesType={casesType} center={mapCenter} zoom={mapZoom} />
       </div>
 
-      <Card className="app__right">
-        <CardContent>
-          {/*Table (each country) */}
-          <h3>Live cases by Country</h3>
-          <Table countries={tableData} />
-
-          {/*Graph */}
-          <h3 className="app__graphTitle">Worldwide new {casesType}</h3>
-          <LineGraph className="app__graph" casesType={casesType} />
-        </CardContent>
-      </Card>
 
     </div>
   );
