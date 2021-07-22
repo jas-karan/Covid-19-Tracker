@@ -1,4 +1,16 @@
-# Link to [Site](https://covid-19-tracker-262.web.app/)
+# Let's Track It
+
+### Project is Deployed [*Here*](https://let-s-track-it.web.app/)
+
+## _Application Screenshots_
+<br/>
+<img src="https://github.com/jas-karan/Project-Pics/blob/master/lti1.JPG" />
+
+<br/><br/>
+
+<img src="https://github.com/jas-karan/Project-Pics/blob/master/lti2.JPG" />
+
+<br/><br/>
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
